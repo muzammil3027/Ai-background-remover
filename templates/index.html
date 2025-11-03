@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro BG Remover | High Quality Background Removal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --text-color: #1f2937;
+            --light-text: #6b7280;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+        
+        .logo-icon {
+            width: 2rem;
+            height: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--light-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: none;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area {
+            padding: 3rem 2rem;
+            text-align: center;
+            border: 2px dashed var(--border-color);
+            border-radius: 0.75rem;
+            margin: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #0d9668;
+            border-color: #0d9668;
+        }
+        
+        .footer {
+            background-color: var(--card-bg);
+            padding: 1.5rem 0;
+            text-align: center;
+            color: var(--light-text);
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+        
+        .drop-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 3px dashed var(--primary-color);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        
+        .drop-indicator-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            background-color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .model-card {
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .model-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .model-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .model-card h5 {
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .model-card p {
+            color: var(--light-text);
+            font-size: 0.875rem;
+            margin-bottom: 0;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .form-section {
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        
+        .form-section-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .form-section-title .icon {
+            margin-left: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .form-section-title .icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .advanced-options {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.5s ease;
+        }
+        
+        .advanced-options.expanded {
+            max-height: 1000px;
+        }
+        
+        .quality-setting {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .quality-setting .form-label {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        
+        .quality-badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .badge-standard {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        
+        .badge-enhanced {
+            background-color: #93c5fd;
+            color: #1e40af;
+        }
+        
+        .badge-premium {
+            background-color: #fde68a;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <span class="logo-icon">BG</span>
+                <span>Pro BG Remover</span>
+            </a>
+        </div>
+        
+    </nav>
+    
+    <div class="container py-4">
+        <div class="hero">
+            <h1>High-Quality Background Removal</h1>
+            <p>Advanced AI technology for professional-grade background removal with edge refinement.</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+                        <div id="uploadArea" class="upload-area">
+                            <div class="upload-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                                </svg>
+                            </div>
+                            <h3>Upload your image</h3>
+                            <p class="text-muted mb-4">or drag and drop it here</p>
+                            <button type="button" id="uploadBtn" class="btn btn-primary px-4 py-2">Choose File</button>
+                            <input type="file" name="file" id="fileInput" accept="image/*" hidden>
+                            
+                            <div class="mt-4">
+                                <h5 class="mb-3">Select AI Model</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="model-card selected" data-model="isnet-general-use">
+                                            <h5>iSNet (Professional) <span class="quality-badge badge-premium">BEST</span></h5>
+                                            <p>State-of-the-art model with excellent edge detection and detail preservation.</p>
+                                            <input type="radio" name="method" value="isnet-general-use" checked hidden>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="model-card" data-model="u2net">
+                                            <h5>U2Net (General) <span class="quality-badge badge-enhanced">ENHANCED</span></h5>
+                                            <p>Good balance of accuracy and speed for most images.</p>
+                                            <input type="radio" name="method" value="u2net" hidden>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="model-card" data-model="u2net_human_seg">
+                                            <h5>Human Portrait <span class="quality-badge badge-enhanced">ENHANCED</span></h5>
+                                            <p>Specialized for people and portraits with better hair detection.</p>
+                                            <input type="radio" name="method" value="u2net_human_seg" hidden>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="model-card" data-model="u2netp">
+                                            <h5>U2NetP (Fast) <span class="quality-badge badge-standard">STANDARD</span></h5>
+                                            <p>Lightweight model for faster processing when speed is important.</p>
+                                            <input type="radio" name="method" value="u2netp" hidden>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <div class="form-section-title" id="advancedOptionsToggle">
+                                        Advanced Options
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon bi bi-chevron-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </div>
+                                    
+                                    <div class="advanced-options" id="advancedOptions">
+                                        <h6 class="mt-3 mb-2">Pre-processing</h6>
+                                        <div class="quality-setting">
+                                            <label class="form-label" for="enhance_contrast">Enhance Contrast</label>
+                                            <span class="quality-badge badge-enhanced">ENHANCED</span>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="enhance_contrast" name="enhance_contrast" value="true">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="quality-setting">
+                                            <label class="form-label" for="enhance_sharpness">Enhance Sharpness</label>
+                                            <span class="quality-badge badge-enhanced">ENHANCED</span>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="enhance_sharpness" name="enhance_sharpness" value="true">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="quality-setting">
+                                            <label class="form-label" for="remove_noise">Remove Noise</label>
+                                            <span class="quality-badge badge-enhanced">ENHANCED</span>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="remove_noise" name="remove_noise" value="true">
+                                            </div>
+                                        </div>
+                                        
+                                        <h6 class="mt-3 mb-2">Edge Quality</h6>
+                                        <div class="quality-setting">
+                                            <label class="form-label" for="edge_refinement">Edge Refinement</label>
+                                            <span class="quality-badge badge-premium">PREMIUM</span>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="edge_refinement" name="edge_refinement" value="true" checked>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="quality-setting">
+                                            <label class="form-label" for="alpha_matting">Alpha Matting</label>
+                                            <span class="quality-badge badge-premium">PREMIUM</span>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="alpha_matting" name="alpha_matting" value="true" checked>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="alphaMattingOptions">
+                                            <div class="mb-3">
+                                                <label for="alpha_matting_foreground_threshold" class="form-label">Foreground Threshold: <span id="foregroundThresholdValue">240</span></label>
+                                                <input type="range" class="form-range" name="alpha_matting_foreground_threshold" id="alpha_matting_foreground_threshold" min="200" max="255" value="240">
+                                                <div class="form-text">Higher values include more foreground details.</div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="alpha_matting_background_threshold" class="form-label">Background Threshold: <span id="backgroundThresholdValue">10</span></label>
+                                                <input type="range" class="form-range" name="alpha_matting_background_threshold" id="alpha_matting_background_threshold" min="0" max="50" value="10">
+                                                <div class="form-text">Lower values remove more background.</div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="alpha_matting_erode_size" class="form-label">Erode Size: <span id="erodeSizeValue">10</span></label>
+                                                <input type="range" class="form-range" name="alpha_matting_erode_size" id="alpha_matting_erode_size" min="0" max="40" value="10">
+                                                <div class="form-text">Controls edge transition area size.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="dropIndicator" class="drop-indicator d-none">
+                                <div class="drop-indicator-text">Drop your image here</div>
+                            </div>
+                            <div id="fileName" class="mt-2 text-muted"></div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="text-center mb-4">
+                    <button type="button" id="submitBtn" class="btn btn-success px-4 py-2 d-none">Remove Background</button>
+                </div>
+                
+                <!-- URL Processing Card - NEW SECTION -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="me-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                                    <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+                                    <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
+                                </svg>
+                            </div>
+                            <h5 class="card-title mb-0">Remove Background from URL</h5>
+                        </div>
+                        
+                        <p class="text-muted mb-3">Process images directly from the web by entering the image URL below</p>
+                        
+                        <form action="/process_url" method="post" id="urlForm">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-light">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-secondary" viewBox="0 0 16 16">
+                                        <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+                                        <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
+                                    </svg>
+                                </span>
+                                <input type="url" name="image_url" id="imageUrl" class="form-control" 
+                                    placeholder="https://example.com/image.jpg" required>
+                                <button type="submit" class="btn btn-primary px-4">
+                                    Process Image
+                                </button>
+                            </div>
+                            
+                            <!-- Hidden fields to copy the currently selected options -->
+                            <input type="hidden" name="method" id="urlMethod" value="isnet-general-use">
+                            <input type="hidden" name="enhance_contrast" id="urlEnhanceContrast" value="false">
+                            <input type="hidden" name="enhance_sharpness" id="urlEnhanceSharpness" value="false">
+                            <input type="hidden" name="remove_noise" id="urlRemoveNoise" value="false">
+                            <input type="hidden" name="edge_refinement" id="urlEdgeRefinement" value="true">
+                            <input type="hidden" name="alpha_matting" id="urlAlphaMatting" value="true">
+                        </form>
+                        
+                        <!-- IMPROVED INFO BOX -->
+                        <div class="d-flex mt-3 p-3 rounded bg-light">
+                            <div class="me-3 text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                                </svg>
+                            </div>
+                            <div class="small text-muted">
+                                <strong>Tips for URL processing:</strong>
+                                <ul class="mb-0 mt-1">
+                                    <li>The URL must point directly to an image file (ending with .jpg, .png, .webp, etc.)</li>
+                                    <li>Images from Imgur, Unsplash, Pixabay, and similar sites work best</li>
+                                    <li>Some websites block external access to their images</li>
+                                    <li>If you get a 403 error, try downloading the image and uploading it directly</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- IMPROVED ERROR HANDLING -->
+                        {% if error %}
+                        <div class="alert alert-danger mt-3">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h6 class="alert-heading mb-1">There was an error</h6>
+                                    {{ error }}
+                                    
+                                    {% if '403' in error %}
+                                    <div class="mt-2">
+                                        <strong>Why this happened:</strong> The website is blocking access to this image.
+                                        <ul class="mt-1 mb-0">
+                                            <li>Try using images from Imgur, Unsplash, or Pixabay</li>
+                                            <li>Use images from your own website</li>
+                                            <li>Download the image and upload it directly instead</li>
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- End URL Processing Card -->
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Professional-Grade Results</h5>
+                        <p class="text-muted">Our advanced AI models provide exceptional quality for:</p>
+                        <div class="row text-center mt-4">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                                    </svg>
+                                </div>
+                                <h5>Portrait Photos</h5>
+                                <p class="text-muted">Perfect for profile pictures with precise hair edge detection</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                                        <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                                    </svg>
+                                </div>
+                                <h5>Product Photos</h5>
+                                <p class="text-muted">Ideal for e-commerce with clean, transparent backgrounds</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                        <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z"/>
+                                    </svg>
+                                </div>
+                                <h5>Complex Images</h5>
+                                <p class="text-muted">Handles transparent objects, fine details, and difficult edges</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Pro BG Remover - High Quality Background Removal Tool</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const uploadArea = document.getElementById('uploadArea');
+            const dropIndicator = document.getElementById('dropIndicator');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileInput = document.getElementById('fileInput');
+            const uploadForm = document.getElementById('uploadForm');
+            const fileName = document.getElementById('fileName');
+            const submitBtn = document.getElementById('submitBtn');
+            const modelCards = document.querySelectorAll('.model-card');
+            const advancedOptionsToggle = document.getElementById('advancedOptionsToggle');
+            const advancedOptions = document.getElementById('advancedOptions');
+            const toggleIcon = advancedOptionsToggle.querySelector('.icon');
+            
+            // Advanced options elements
+            const alphaMattingCheckbox = document.getElementById('alpha_matting');
+            const alphaMattingOptions = document.getElementById('alphaMattingOptions');
+            const foregroundThreshold = document.getElementById('alpha_matting_foreground_threshold');
+            const foregroundThresholdValue = document.getElementById('foregroundThresholdValue');
+            const backgroundThreshold = document.getElementById('alpha_matting_background_threshold');
+            const backgroundThresholdValue = document.getElementById('backgroundThresholdValue');
+            const erodeSize = document.getElementById('alpha_matting_erode_size');
+            const erodeSizeValue = document.getElementById('erodeSizeValue');
+            
+            // Event listeners
+            uploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Toggle advanced options
+            advancedOptionsToggle.addEventListener('click', function() {
+                advancedOptions.classList.toggle('expanded');
+                toggleIcon.classList.toggle('rotated');
+            });
+            
+            // Alpha matting toggle
+            alphaMattingCheckbox.addEventListener('change', function() {
+                alphaMattingOptions.style.display = this.checked ? 'block' : 'none';
+            });
+            
+            // Update slider values
+            foregroundThreshold.addEventListener('input', function() {
+                foregroundThresholdValue.textContent = this.value;
+            });
+            
+            backgroundThreshold.addEventListener('input', function() {
+                backgroundThresholdValue.textContent = this.value;
+            });
+            
+            erodeSize.addEventListener('input', function() {
+                erodeSizeValue.textContent = this.value;
+            });
+            
+            // Model selection
+            modelCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    modelCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Update hidden radio input
+                    const model = this.getAttribute('data-model');
+                    document.querySelector(`input[value="${model}"]`).checked = true;
+                });
+            });
+            
+            // Handle file input change
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    fileName.textContent = e.target.files[0].name;
+                    submitBtn.classList.remove('d-none');
+                }
+            });
+            
+            // Submit button
+            submitBtn.addEventListener('click', function() {
+                uploadForm.submit();
+            });
+            
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragenter', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropIndicator.classList.remove('d-none');
+            });
+            
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropIndicator.classList.remove('d-none');
+            });
+            
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropIndicator.classList.add('d-none');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropIndicator.classList.add('d-none');
+                
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    fileInput.files = e.dataTransfer.files;
+                    fileName.textContent = e.dataTransfer.files[0].name;
+                    submitBtn.classList.remove('d-none');
+                }
+            });
+            
+            // Sync URL form with main form options
+            modelCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const model = this.getAttribute('data-model');
+                    document.getElementById('urlMethod').value = model;
+                });
+            });
+            
+            // Sync enhancement options
+            if (document.getElementById('enhance_contrast')) {
+                document.getElementById('enhance_contrast').addEventListener('change', function() {
+                    document.getElementById('urlEnhanceContrast').value = this.checked;
+                });
+            }
+            
+            if (document.getElementById('enhance_sharpness')) {
+                document.getElementById('enhance_sharpness').addEventListener('change', function() {
+                    document.getElementById('urlEnhanceSharpness').value = this.checked;
+                });
+            }
+            
+            if (document.getElementById('remove_noise')) {
+                document.getElementById('remove_noise').addEventListener('change', function() {
+                    document.getElementById('urlRemoveNoise').value = this.checked;
+                });
+            }
+            
+            if (document.getElementById('edge_refinement')) {
+                document.getElementById('edge_refinement').addEventListener('change', function() {
+                    document.getElementById('urlEdgeRefinement').value = this.checked;
+                });
+            }
+            
+            if (document.getElementById('alpha_matting')) {
+                document.getElementById('alpha_matting').addEventListener('change', function() {
+                    document.getElementById('urlAlphaMatting').value = this.checked;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
